@@ -132,6 +132,10 @@
   cursor: pointer;
 }
 
+.profile__change-btn:hover {
+  opacity: 0.7;
+}
+
 @media screen and (max-width: 320px){
   .profile__change-btn {
     margin-top: 379px;
@@ -155,6 +159,10 @@
   border: none;
   background-color: #fafafa;
   cursor: pointer;
+}
+
+.profile__exit-btn:hover {
+  opacity: 0.7;
 }
 
 @media screen and (max-width: 320px){

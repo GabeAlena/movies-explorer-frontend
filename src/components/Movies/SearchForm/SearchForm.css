@@ -125,6 +125,11 @@
   background-repeat: no-repeat;
   background-position: center;
   border: none;
+  cursor: pointer;
+}
+
+.search-form__button:hover {
+  opacity: 0.8;
 }
 
 .search-form__filter {

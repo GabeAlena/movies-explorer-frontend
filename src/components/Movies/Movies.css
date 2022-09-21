@@ -23,6 +23,11 @@
   font-size: 12px;
   line-height: 15px;
   color: #000000;
+  cursor: pointer;
+}
+
+.movies__more-btn:hover {
+  opacity: 0.8;
 }
 
 @media screen and (max-width: 768px){

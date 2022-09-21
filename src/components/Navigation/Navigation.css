@@ -15,6 +15,10 @@
   color: #000000;
 }
 
+.navigation__nav-movies:hover {
+  opacity: 0.7;
+}
+
 .navigation__nav-movies_active {
   font-weight: 500;
 }
@@ -24,6 +28,10 @@
   text-decoration: none;
   margin-left: 16px;
   color: #000000;
+}
+
+.navigation__nav-saved-movies:hover {
+  opacity: 0.7;
 }
 
 .navigation__nav-saved-movies_active {
@@ -44,6 +52,11 @@
   text-decoration: none;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;
+}
+
+.navigation__profile:hover {
+  opacity: 0.7;
 }
 
 .navigation__profile_account {
