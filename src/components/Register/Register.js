@@ -4,7 +4,9 @@ import registerLogo from '../../images/header_logo.svg';
 function Register() {
     return ( 
         <div className="register">
-            <img className="register__logo" src={registerLogo} alt="логотип сайта" />
+            <Link to="/" className="register__logo">
+                <img src={registerLogo} alt="логотип сайта" />
+            </Link>
             <h1 className="register__signup">Добро пожаловать!</h1>
             <form className="register__form">
                 <label className="register__label">Имя</label>

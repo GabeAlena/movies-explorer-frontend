@@ -4,7 +4,9 @@ import loginLogo from '../../images/header_logo.svg';
 function Login() {
     return (
         <div className="login">
-            <img className="login__logo" src={loginLogo} alt="логотип сайта" />
+            <Link to="/" className="login__logo">
+                <img src={loginLogo} alt="логотип сайта" />
+            </Link>
             <h1 className="login__signin">Рады видеть!</h1>
             <form className="login__form">
                 <label className="login__label">E-mail</label>

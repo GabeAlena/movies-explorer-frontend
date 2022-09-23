@@ -16,7 +16,7 @@ function AboutMe() {
                         назад я решила пройти вводный курс в веб-разработку и мне понравилось. Теперь люди, 
                         употребляющие слова "пушить, вёрстка, гит" не кажутся мне сумасшедшими!
                     </p>
-                    <a href="https://github.com/GabeAlena" className="about-me__account">Github</a>
+                    <a href="https://github.com/GabeAlena" target="blank" className="about-me__account">Github</a>
                 </div>
                 <img className="about-me__photo" src={aboutMe} alt="фото разработчика"></img>
             </div>
