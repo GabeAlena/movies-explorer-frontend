@@ -50,7 +50,6 @@
 }
 
 .portfolio__link {
-  border-bottom: 1px solid #e8e8e8;
   width: 100%;
   box-sizing: border-box;
   padding-bottom: 9px;
@@ -69,7 +68,13 @@
   }
 }
 
-.portfolio__link:last-of-type {
+.portfolio__link-container {
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.portfolio__link-container:last-of-type {
   border: none;
 }
 
