@@ -1,0 +1,12 @@
+.app {
+  background-color: #fafafa;
+  color: #fff;
+  font-weight: 400;
+  min-width: 320px;
+  max-width: 1280px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0 auto;
+}

@@ -1,0 +1,243 @@
+.about-project {
+  background-color: #fafafa;
+  margin: 0;
+  padding: 110px 70px;
+}
+
+@media screen and (max-width: 768px){
+  .about-project {
+    padding: 90px 50px;
+  }
+}
+
+@media screen and (max-width: 530px){
+  .about-project {
+    padding: 80px 30px;
+  }
+}
+
+@media screen and (max-width: 320px){
+  .about-project {
+    padding: 70px 18px;
+  }
+}
+
+.about-project__section {
+  min-height: 388px;
+}
+
+.about-project__title {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 27px;
+  color: #000000;
+  letter-spacing: -0.04em;
+  border-bottom: 1px solid #000000;
+  box-sizing: border-box;
+  min-height: 50px;
+}
+
+@media screen and (max-width: 320px){
+  .about-project__title {
+    font-size: 18px;
+    line-height: 22px;
+  }
+}
+
+.about-project__columns {
+  display: flex;
+  flex-direction: row;
+  margin-top: 70px;
+  margin-bottom: 110px;
+}
+
+@media screen and (max-width: 768px){
+  .about-project__columns {
+    margin-bottom: 93px; 
+  }
+}
+
+@media screen and (max-width: 540px){
+  .about-project__columns {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 320px){
+  .about-project__columns {
+    margin-top: 60px;
+    margin-bottom: 60px;
+  }
+}
+
+.about-project__column {
+  max-width: 550px;
+  margin-right: 40px;
+}
+
+@media screen and (max-width: 768px){
+  .about-project__column {
+    max-width: 319px;
+    margin-right: 30px; 
+  }
+}
+
+@media screen and (max-width: 540px){
+  .about-project__column {
+    margin-bottom: 75px;
+    margin-right: 0;
+    max-width: 100%;
+  }
+}
+
+@media screen and (max-width: 320px){
+  .about-project__column {
+    width: 100%;
+    margin-bottom: 56px;
+  }
+}
+
+.about-project__column:last-of-type {
+  margin-right: 0;
+  margin-bottom: 0;
+}
+
+.about-project__column-title {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -0.04em;
+  color: #000000;
+}
+
+@media screen and (max-width: 320px){
+  .about-project__column-title {
+    font-size: 18px;
+    line-height: 22px;
+  }
+}
+
+.about-project__column-paragraph {
+  margin: 0;
+  margin-top: 26px;
+  padding: 0;
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: #000000;
+}
+
+@media screen and (max-width: 768px){
+  .about-project__column-paragraph {
+    margin-top: 22px;
+    font-size: 12px;
+    line-height: 18px;
+  }
+}
+
+@media screen and (max-width: 320px){
+  .about-project__column-paragraph {
+    margin-top: 16px;
+    font-size: 11px;
+    line-height: 16px;
+  }
+}
+
+.about-project__weeks {
+  display: grid;
+  grid-template-columns: 1fr 4fr;
+}
+
+@media screen and (max-width: 768px){
+  .about-project__weeks {
+    grid-template-columns: 1.061fr 4fr;
+  }
+}
+
+@media screen and (max-width: 540px){
+  .about-project__weeks {
+    grid-template-columns: 1fr 1.84fr;
+  }
+}
+
+.about-project__week-title-backend {
+  margin: 0;
+  padding: 9px 14px;
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #FFFFFF;
+  background-color: #3456F3;
+  text-align: center;
+}
+
+@media screen and (max-width: 320px){
+  .about-project__week-title-backend {
+    padding: 11px 14px;
+    font-size: 11px;
+    line-height: 13px;    
+  }
+}
+
+.about-project__week-title-frontend {
+  margin: 0;
+  padding: 9px 14px;
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
+  background-color: #f2f2f2;
+  text-align: center;
+}
+
+@media screen and (max-width: 320px){
+  .about-project__week-title-frontend {
+    padding: 11px 14px;
+    font-size: 11px;
+    line-height: 13px;    
+  }
+}
+
+.about-project__week-subtitle {
+  margin: 0;
+  margin-top: 14px;
+  padding: 0;
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  color: #a0a0a0;
+  background-color: transparent;
+  text-align: center;
+}
+
+@media screen and (max-width: 768px){
+  .about-project__week-subtitle {
+    font-weight: 400;
+  }
+}
+
+@media screen and (max-width: 320px){
+  .about-project__week-subtitle {
+    margin-top: 10px;
+    font-size: 11px;
+    line-height: 13px;
+  }
+}

@@ -1,0 +1,114 @@
+.movie-card {
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  align-items: center;
+  box-sizing: border-box;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  box-shadow: 0px 16px 24px rgba(0, 0, 0, 0.05);
+}
+
+@media screen and (max-width: 320px){
+  .movies-card {
+    justify-items: center;
+  }
+}
+
+.movie-card__image {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  box-sizing: border-box;
+  border-radius: 10px 10px 0 0;
+}
+
+.movie-card__title-duration-like {
+  margin: 0;
+  width: 100%;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.movie-card__title-like {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.movie-card__title {
+  margin: 0;
+  padding: 0;
+  padding-bottom: 10px;
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  max-width: 208px;
+  color: #000000;
+}
+
+.movie-card__duration {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 13px;
+  color: #a0a0a0;
+}
+
+.movie-card__like-button {
+  border: none;
+  background-image: url(../../../images/like.svg);
+  box-sizing: border-box;
+  background-position-y: -3px;
+  background-position-x: -6px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  height: 16px;
+  width: 16px;
+  border-radius: 50px;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.09);
+}
+
+.movie-card__dislike-button {
+  border: none;
+  background-image: url(../../../images/dislike.svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-position-y: -3px;
+  background-position-x: -6px;
+  box-sizing: border-box;
+  cursor: pointer;
+  height: 16px;
+  width: 16px;
+  border-radius: 50px;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.09);
+}
+
+.movie-card__delete-button {
+  border: none;
+  background-image: url(../../../images/small_cross_for_saved_films.svg);
+  background-color: #FFFFFF;
+  background-repeat: no-repeat;
+  background-position: center;
+  box-sizing: border-box;
+  cursor: pointer;
+  height: 16px;
+  width: 16px;
+  padding: 0;
+  margin: 0;
+}
