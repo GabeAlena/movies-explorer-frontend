@@ -1,38 +1,71 @@
-function Profile() {
+import { useContext, useEffect, useState } from 'react';
+import { ValidationForm } from '../../utils/validationForm';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import { mainApi } from '../../utils/MainApi';
+
+function Profile({ onSignOut, onChangeProfile }) {
+    const { currentUser } = useContext(CurrentUserContext);
+    console.log(currentUser);
+
+    const { values, handleChange, isValid, setValues, errors } = ValidationForm();
+
+    console.log(values);
+    
+    function handleSubmit(e) {
+        e.preventDefault();
+        /* onSubmit(values.name, values.email); */
+        onChangeProfile(values);
+    }
+
+    useEffect(() => {
+        setValues(currentUser);
+    }, [currentUser]);
+
     return (
         <div className="profile">
-            <form className="profile__form">
-                <p className="profile__welcome"> Привет, Виталий!</p>
-                <div className="profile__container">
+            <form className="profile__form" onSubmit={handleSubmit}>
+                <p className="profile__welcome">{`Привет, ${currentUser.name}!`}</p>
+                <div className={`profile__container ${errors.name ? 'profile__container_error' : ''}`}>
                     <label className="profile__label">Имя</label>
                     <input 
                         className="profile__input"
                         required
-                        placeholder="Имя"
                         id="name-profile-input" 
                         name="name" 
                         type="text"
                         minLength="2"
                         maxLength="40"
-                        value="Виталий"
+                        value={values.name || ''}
+                        onChange={handleChange}
                     />
                 </div>
-                <div className="profile__container">
+                <span className="profile__error">{errors.name || ''}</span>
+                <div className={`profile__container ${errors.email ? 'profile__container_error' : ''}`}>
                     <label className="profile__label">E-mail</label>
                     <input
                         className="profile__input"
                         required
-                        placeholder="email"
                         id="email-profile-input" 
                         name="email" 
                         type="email"
                         minLength="2"
                         maxLength="40"
-                        value="pochta@yandex.ru"
+                        value={values.email || ''}
+                        onChange={handleChange}
                     />
                 </div>
-                <button type="submit" className="profile__change-btn">Редактировать</button>
-                <button type="submit" className="profile__exit-btn">Выйти из аккаунта</button>
+                <span className="profile__error">{errors.email || ''}</span>
+                <button 
+                    type="submit" 
+                    className={
+                        !isValid || (values.name === currentUser.name && values.email === currentUser.email)
+                            ? 'profile__change-btn register__button_disabled'
+                            : 'profile__change-btn'
+                    }
+                    /* className={`profile__change-btn ${!isValid ? 'register__button_disabled' : ''}`} */
+                    /* disabled={!isValid || (values.name === currentUser.name && values.email === currentUser.email)} */
+                    >Редактировать</button>
+                <button type="submit" className="profile__exit-btn" onClick={onSignOut}>Выйти из аккаунта</button>
             </form>
         </div>
     )

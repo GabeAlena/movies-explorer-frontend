@@ -1,21 +1,30 @@
-import React from 'react';
-import MovieCard from '../MoviesCard/MoviesCard';
+import React, { useEffect, useState } from 'react';
+import MoviesCard from '../MoviesCard/MoviesCard';
+import { useLocation } from "react-router-dom";
 
-const MoviesCardList = () => {
+const MoviesCardList = ({ 
+    movies,
+    savedMovies,
+    onMovieSave,
+    onMovieDelete,
+    }) => {
+
+    const location = useLocation();
+
     return (
         <section className="movies-card-list">
-            <MovieCard />
-            <MovieCard />
-            <MovieCard />
-            <MovieCard />
-            <MovieCard />
-            <MovieCard />
-            <MovieCard />
-            <MovieCard />
-            <MovieCard />
-            <MovieCard />
-            <MovieCard />
-            <MovieCard />
+            <div className="movies-card-list__movie">
+                {movies.map((movie) => (
+                    <MoviesCard
+                        key={movie.id || movie.movieId || movie._id} 
+                        savedMovies={savedMovies} 
+                        movie={movie}
+                        movies={movies}
+                        onMovieSave={onMovieSave}
+                        onMovieDelete={onMovieDelete}
+                    />
+                ))}
+            </div>
         </section>
     )
 }

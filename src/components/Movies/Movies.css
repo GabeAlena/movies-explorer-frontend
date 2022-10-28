@@ -26,6 +26,11 @@
   cursor: pointer;
 }
 
+.movies__more-btn_hidden {
+  opacity: 0;
+  display: none;
+}
+
 .movies__more-btn:hover {
   opacity: 0.8;
 }
@@ -41,5 +46,28 @@
   .movies__more-btn {
     margin-right: 10px;
     margin-left: 10px;
+  }
+}
+
+.movies__error {
+  color: black;
+  font-family: 'Inter', Arial, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 26px;
+  text-decoration: none;
+  padding-left: 70px;
+}
+
+@media screen and (max-width: 768px){
+  .movies__error {
+    padding-left: 30px;
+  }
+}
+
+@media screen and (max-width: 460px){
+  .movies__error {
+    padding-left: 30px;
   }
 }
