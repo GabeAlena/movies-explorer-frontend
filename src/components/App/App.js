@@ -56,7 +56,7 @@ function App() {
                 navigate('/');
               }
             })
-            .catch((err) => console.log(err));
+            .catch((err) => console.log(err))
       }
     };
 
@@ -102,12 +102,24 @@ function App() {
     useEffect(() => {
         if (localStorage.getItem('savedMovies')) {
             setSavedMovies(JSON.parse(localStorage.getItem('savedMovies')));
-            setMovieSearchResult(JSON.parse(localStorage.getItem('searchResults')));
         } else if (isLoggedIn) {
             mainApi.getMovies()
                 .then((res) => {
                     setSavedMovies(res);
                     localStorage.setItem('savedMovies', JSON.stringify(res));
+                })
+                .catch((err) => console.log(err));
+        }
+    }, [isLoggedIn]);
+
+    useEffect(() => {
+        if (localStorage.getItem('searchResults')) {
+            setMovieSearchResult(JSON.parse(localStorage.getItem('searchResults')));
+        } else if (isLoggedIn) {
+            mainApi.getMovies()
+                .then((res) => {
+                    setMovieSearchResult(res);
+                    localStorage.setItem('searchResults', JSON.stringify(res));
                 })
                 .catch((err) => console.log(err));
         }
