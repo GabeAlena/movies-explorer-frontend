@@ -1,15 +1,11 @@
 import SearchForm from './SearchForm/SearchForm';
 import MoviesCardList from './MoviesCardList/MoviesCardList';
 import Preloader from './Preloader/Preloader';
-import { moviesApi } from '../../utils/MoviesApi';
 import { useEffect, useState } from 'react';
-import { mainApi } from '../../utils/MainApi';
-import { useLocation } from 'react-router-dom';
 
 function Movies({
     movies,
     savedMovies,
-    setSavedMovies,
     onSearch,
     handleCheckboxSwitch,
     isShortMovieChecked,
@@ -18,13 +14,11 @@ function Movies({
     isLoading,
     onMovieSave,
     onMovieDelete,
-    searchResult, }) {
+    }) {
     
     const [cardsCount, setCardsCount] = useState(null);
     const [cardsAddCount, setCardsAddCount] = useState(null);
     
-    const location = useLocation().pathname;
-
     const visibleMovies = movies.slice(0, cardsCount);
     
     //console.log(cardsCount); //количество карточек, которое должно присутствовать на странице до первого нажатия на "еще"

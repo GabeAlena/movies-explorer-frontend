@@ -5,12 +5,6 @@ import headerProfileImg from '../../../images/man.svg';
 function NavigationSidebar({ handleOpenMenu, sidebar }) {
     const location = useLocation();
 
-    /* function handleCloseSidebar(evt) {
-        if(evt.target.classList.contains('.navigation-sidebar')){
-            onClose();
-        }
-    } */
-
     return (
         <section className={`navigation-sidebar ${sidebar ? 'sidebar_active' : ''}`}>
             <div className="navigation-sidebar__nav">

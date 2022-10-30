@@ -9,10 +9,8 @@ function SavedMovies({
     onSearch,
     onSavedSearch,
     handleCheckboxSwitch,
-    setRender,
     isLoggenIn,
     isShortMovieChecked,
-    isNoResults,
     resetIsSavedMoviesFiltered,
     onMovieDelete,
     }) {
@@ -32,9 +30,7 @@ function SavedMovies({
                     savedMovies={savedMovies}
                     savedMovieSearchResult={savedMovieSearchResult}
                     isSavedMoviesFiltered={isSavedMoviesFiltered}
-                    //setRender={setRender}
                     isLoggenIn={isLoggenIn}
-                    //isNoResults={isNoResults}
                     resetIsSavedMoviesFiltered={resetIsSavedMoviesFiltered}
                     onMovieDelete={onMovieDelete}
                 />

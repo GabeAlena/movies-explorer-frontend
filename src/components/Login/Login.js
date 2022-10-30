@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ValidationForm } from '../../utils/validationForm';
 import loginLogo from '../../images/header_logo.svg';
@@ -9,7 +8,6 @@ function Login({ onLogin }) {
     function handleSubmit(e) {
         e.preventDefault();
         onLogin(values);
-        //onLogin(values.email, values.password);
     }
 
     return (

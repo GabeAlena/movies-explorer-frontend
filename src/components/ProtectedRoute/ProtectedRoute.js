@@ -3,8 +3,6 @@ import { Navigate } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 
 const ProtectedRoute = ({ isLoggedIn, children }) => {
-  //return (isLoggedIn ? children : <Navigate to="/" replace />)
-
   const location = useLocation().pathname;
   if (isLoggedIn && location.pathname === '/profile') {
     return <Navigate to="/profile" replace />;

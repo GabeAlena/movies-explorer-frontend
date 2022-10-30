@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ValidationForm } from '../../utils/validationForm';
 import registerLogo from '../../images/header_logo.svg';
 
 function Register({ onRegister }) {
@@ -22,13 +21,6 @@ function Register({ onRegister }) {
         e.preventDefault();
         onRegister(values);
     }
-  
-    /*const { values, handleChange, errors, isValid, resetForm } = ValidationForm();
-
-    function handleSubmit(e) {
-        e.preventDefault();
-        onRegister(values);
-    }*/
 
     return ( 
         <div className="register">

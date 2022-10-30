@@ -42,7 +42,6 @@ export const authorization = (data) => {
 };
 
 export const checkToken = (token) => {
-    console.log(token);
     return fetch(`${baseUrl}/users/me`, {
         method: 'GET',
         headers: {
@@ -51,7 +50,5 @@ export const checkToken = (token) => {
             'Authorization': `Bearer ${token}`,
         }
     })
-    .then(res => res.json())
-    .then(res => console.log(res))
     .then(checkResponse);
 }

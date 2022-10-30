@@ -19,7 +19,6 @@ import { moviesApi } from '../../utils/MoviesApi.js';
 import successImage from '../../images/success.svg';
 import failImage from '../../images/fail.svg';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import Navigation from '../Navigation/Navigation';
 
 function App() {
     const [currentUser, setCurrentUser] = useState({});
@@ -53,7 +52,6 @@ function App() {
               if (res) {
                 setCurrentUser(res);
                 setIsLoggedIn(true);
-                navigate('/');
               }
             })
             .catch((err) => console.log(err))
@@ -89,7 +87,6 @@ function App() {
                 if (res) {
                     setCurrentUser(res);
                     setIsLoggedIn(true);
-                    //navigate('/movies');
                 }
             })
             .catch((err) => console.log(err));
@@ -112,6 +109,8 @@ function App() {
         }
     }, [isLoggedIn]);
 
+    //эффект который достает из хранилища найденные в последний раз фильмы, если их там нет,
+    //то добавляет в хранилище searchResults
     useEffect(() => {
         if (localStorage.getItem('searchResults')) {
             setMovieSearchResult(JSON.parse(localStorage.getItem('searchResults')));
@@ -132,7 +131,6 @@ function App() {
                 setCurrentUser(res);
                 console.log(currentUser);
                 handleLogin(data);
-                //return;
             })
             .catch((err) => {
                 console.log(err);
@@ -193,29 +191,15 @@ function App() {
 
     // поиск слова в сохраненных фильмах
     function handleSearchRequestInSaved(searchWord, checkboxState) {
-        //setIsLoading(true);
-        setTimeout(() => {
-            const movieList = filterBySearchWord(savedMovies, searchWord, checkboxState);
-            /*if (movieList !== null && movieList.length !== 0) {
-                setIsNoResults(false);
-            } else {
-                setIsNoResults(true);
-            }*/
-            localStorage.setItem('checkboxStateInSaved', checkboxState);
-            setSavedMovieSearchResult(movieList);
-            setIsSavedMoviesFiltered(true);
-            //setIsLoading(false);
-        }, 1000);
+        const movieList = filterBySearchWord(savedMovies, searchWord, checkboxState);
+        localStorage.setItem('checkboxStateInSaved', checkboxState);
+        setSavedMovieSearchResult(movieList);
+        setIsSavedMoviesFiltered(true);
     };
 
     function resetIsSavedMoviesFiltered () {
         setIsSavedMoviesFiltered(false);
     };
-
-    /*function getSearchResults() {
-        return localStorage.getItem('searchResults').length > 0 ?
-            JSON.parse(localStorage.getItem('searchResults')) : [];
-    };*/
 
     //функция, которая ищет фильмы по адресу beatfilm
     function handleSearchMoviesInMoviesApi(searchWord, checkboxState) {
@@ -327,7 +311,7 @@ function App() {
                 <Route path="/" exact element={
                     <Main />
                 }/>
-                <Route path="/movies" /*isLoggedIn={isLoggedIn}*/ element={
+                <Route path="/movies" element={
                     <ProtectedRoute isLoggedIn={isLoggedIn}>
                         <Movies 
                             movies={movieSearchResult}
@@ -344,27 +328,23 @@ function App() {
                         />
                     </ProtectedRoute>
                 } />
-                <Route path="/saved-movies" /*isLoggedIn={isLoggedIn}*/ element={
+                <Route path="/saved-movies" element={
                     <ProtectedRoute isLoggedIn={isLoggedIn}>
                         <SavedMovies 
                             movies={isSavedMoviesFiltered ? savedMovieSearchResult : savedMovies}
-                            //movies={savedMovies}
                             setSavedMovies={setSavedMovies}
                             savedMovies={savedMovies}
-                            //isLoading={isLoading}
                             savedMovieSearchResult={savedMovieSearchResult}
                             isSavedMoviesFiltered={isSavedMoviesFiltered}
-                            //onSearch={handleSearchMoviesInMoviesApi}
                             onSavedSearch={handleSearchRequestInSaved}
                             handleCheckboxSwitch={switchCheckBox}
                             isShortMovieChecked={isShortMovieChecked}
-                            //isNoResults={isNoResults}
                             resetIsSavedMoviesFiltered={resetIsSavedMoviesFiltered}
                             onMovieDelete={handleDeleteSavedMovies}
                         />
                     </ProtectedRoute>
                 } />
-                <Route path="/profile" /*isLoggedIn={isLoggedIn}*/ element={
+                <Route path="/profile" element={
                     <ProtectedRoute isLoggedIn={isLoggedIn}>
                         <Profile 
                             onChangeProfile={handleChangeProfile}

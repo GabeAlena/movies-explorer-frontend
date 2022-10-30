@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import MoviesCard from '../MoviesCard/MoviesCard';
-import { useLocation } from "react-router-dom";
 
 const MoviesCardList = ({ 
     movies,
@@ -8,8 +7,6 @@ const MoviesCardList = ({
     onMovieSave,
     onMovieDelete,
     }) => {
-
-    const location = useLocation();
 
     return (
         <section className="movies-card-list">

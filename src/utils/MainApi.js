@@ -63,19 +63,7 @@ class MainApi {
                 authorization: `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(data/*{
-                country: movie.country,
-                director: movie.director,
-                duration: movie.duration,
-                year: movie.year,
-                description: movie.description,
-                image: `${this._apiUrl}${movie.image.url}`,
-                trailerLink: movie.trailerLink || '',
-                thumbnail: `${this._apiUrl}${movie.image.formats.thumbnail.url}`,
-                movieId: movie.id,
-                nameRU: movie.nameRU || '',
-                nameEN: movie.nameEN || '',
-            }*/),
+            body: JSON.stringify(data),
         })
         .then(this._checkResponse);
     };

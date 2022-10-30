@@ -1,12 +1,9 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React from 'react';
 import { useLocation } from "react-router-dom";
 
 function MoviesCard({ movie, onMovieSave, onMovieDelete, savedMovies }) {
     const location = useLocation();
     const isSaved = savedMovies.some(i => i.movieId === movie.id);
-    //console.log(movie);
-    //console.log(movie.id);
-    //console.log(movie.movieId);
 
     function handleSave() {
         if (isSaved) {

@@ -1,7 +1,6 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { ValidationForm } from '../../utils/validationForm';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import { useLocation } from 'react-router-dom';
 
 function Profile({ onSignOut, onChangeProfile }) {
     const { currentUser } = useContext(CurrentUserContext);
@@ -60,8 +59,6 @@ function Profile({ onSignOut, onChangeProfile }) {
                             ? 'profile__change-btn register__button_disabled'
                             : 'profile__change-btn'
                     }
-                    /* className={`profile__change-btn ${!isValid ? 'register__button_disabled' : ''}`} */
-                    /* disabled={!isValid || (values.name === currentUser.name && values.email === currentUser.email)} */
                     >Редактировать</button>
                 <button type="submit" className="profile__exit-btn" onClick={onSignOut}>Выйти из аккаунта</button>
             </form>
