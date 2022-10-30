@@ -4,17 +4,13 @@ import { ValidationForm } from '../../utils/validationForm';
 import loginLogo from '../../images/header_logo.svg';
 
 function Login({ onLogin }) {
-    const { values, handleChange, errors, isValid, resetForm } = ValidationForm();
+    const { values, handleChange, errors, isValid } = ValidationForm();
 
     function handleSubmit(e) {
         e.preventDefault();
         onLogin(values);
         //onLogin(values.email, values.password);
     }
-
-    /* useEffect(() => {
-        resetForm();
-    }, [resetForm]); */
 
     return (
         <div className="login">

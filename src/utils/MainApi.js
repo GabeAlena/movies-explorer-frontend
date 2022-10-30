@@ -24,19 +24,19 @@ class MainApi {
     }
 
     //редактирование профиля
-    editProfileData(userData) {
-        console.log(userData.name);
-        console.log(userData.email);
+    editProfileData(data) {
+        console.log(data.name);
+        console.log(data.email);
         return fetch(`${this._baseUrl}/users/me`, {
             method: 'PATCH',
             headers: {
                 authorization: `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(userData/*{
-                name,
-                email
-            */)
+            body: JSON.stringify({
+                name: data.name,
+                email: data.email,
+            })
         })
         .then(this._checkResponse);
     };
@@ -54,16 +54,16 @@ class MainApi {
     };
 
     //сохранение фильма
-    saveMovie(movie) {
-        console.log(movie);
-        console.log(movie.movieId);
+    saveMovie(data) {
+        console.log(data);
+        console.log(data.movieId);
         return fetch(`${this._baseUrl}/movies`, {
             method: 'POST',
             headers: {
                 authorization: `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(movie/*{
+            body: JSON.stringify(data/*{
                 country: movie.country,
                 director: movie.director,
                 duration: movie.duration,

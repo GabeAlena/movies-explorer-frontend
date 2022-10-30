@@ -1,11 +1,10 @@
 import { useContext, useEffect, useState } from 'react';
 import { ValidationForm } from '../../utils/validationForm';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import { mainApi } from '../../utils/MainApi';
+import { useLocation } from 'react-router-dom';
 
 function Profile({ onSignOut, onChangeProfile }) {
     const { currentUser } = useContext(CurrentUserContext);
-    console.log(currentUser);
 
     const { values, handleChange, isValid, setValues, errors } = ValidationForm();
 
@@ -13,7 +12,6 @@ function Profile({ onSignOut, onChangeProfile }) {
     
     function handleSubmit(e) {
         e.preventDefault();
-        /* onSubmit(values.name, values.email); */
         onChangeProfile(values);
     }
 

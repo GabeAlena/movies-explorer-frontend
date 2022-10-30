@@ -32,9 +32,9 @@ function SavedMovies({
                     savedMovies={savedMovies}
                     savedMovieSearchResult={savedMovieSearchResult}
                     isSavedMoviesFiltered={isSavedMoviesFiltered}
-                    setRender={setRender}
+                    //setRender={setRender}
                     isLoggenIn={isLoggenIn}
-                    isNoResults={isNoResults}
+                    //isNoResults={isNoResults}
                     resetIsSavedMoviesFiltered={resetIsSavedMoviesFiltered}
                     onMovieDelete={onMovieDelete}
                 />

@@ -16,7 +16,11 @@ export const register = (data) => {
             'Accept': 'application/json',
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify({  
+            name: data.name,
+            email: data.email,
+            password: data.password,
+        })
     })
     .then(checkResponse);
 };
@@ -29,7 +33,10 @@ export const authorization = (data) => {
             'Accept': 'application/json',
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify({
+            email: data.email,
+            password: data.password,
+        })
     })
     .then(checkResponse)
 };
@@ -45,5 +52,6 @@ export const checkToken = (token) => {
         }
     })
     .then(res => res.json())
+    .then(res => console.log(res))
     .then(checkResponse);
 }

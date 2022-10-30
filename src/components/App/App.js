@@ -31,7 +31,6 @@ function App() {
 
     const [sidebar, setSidebar] = useState(false);
 
-    const [movies, setMovies] = useState([]);
     const [movieSearchResult, setMovieSearchResult] = useState([]);
     const [isShortMovieChecked, setIsShortMovieChecked] = useState(false);
 
@@ -46,27 +45,23 @@ function App() {
         setSidebar(!sidebar);
     }
 
-    function checkToken() {
-        console.log(currentUser);
-        const token = localStorage.getItem('token');
-        if (token) {
-            auth.checkToken(token)
-                .then((res) => {
-                    if (res) {
-                        console.log(res);
-                        setCurrentUser(res);
-                        console.log(currentUser);
-                        setIsLoggedIn(true);
-
-                        navigate('/');
-                    }
-                })
-                .catch((err) => console.log(err));
-        }
+    const checkToken = () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        auth.checkToken(token)
+            .then((res) => {
+              if (res) {
+                setCurrentUser(res);
+                setIsLoggedIn(true);
+                navigate('/');
+              }
+            })
+            .catch((err) => console.log(err));
+      }
     };
 
     useEffect(() => {
-        checkToken();
+      checkToken();
     }, []);
 
     useEffect(() => {
@@ -77,36 +72,42 @@ function App() {
     }, [isLoggedIn]);
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-            handleSignOut();
-        }
+      const token = localStorage.getItem('token');
+      if (!token) {
+        handleSignOut();
+      }
     }, [isLoggedIn]);
 
-    //эффект, возвращающий текущего пользователя
     useEffect(() => {
+        getUserInfo();
+    }, [isLoggedIn]);
+
+    function getUserInfo() {
         if (isLoggedIn) {
             mainApi.getUserInfo()
-                .then((res) => {
-                    console.log(res);
+            .then((res) => {
+                if (res) {
                     setCurrentUser(res);
-                    /*setCurrentUser({
-                        name: res.name,
-                        email: res.email,
-                        _id: res._id,
-                    });*/
                     setIsLoggedIn(true);
-                })
-                .catch((err) => console.log(err));
+                    //navigate('/movies');
+                }
+            })
+            .catch((err) => console.log(err));
         }
-    }, [isLoggedIn]);
 
-    //эффект, возвращающий фильмы текущего пользователя
+    };
+
+    //эффект который достает из хранилища сохраненные фильмы, если их там нет,
+    //то добавляет в хранилище savedMovies
     useEffect(() => {
-        if (isLoggedIn) {
+        if (localStorage.getItem('savedMovies')) {
+            setSavedMovies(JSON.parse(localStorage.getItem('savedMovies')));
+            setMovieSearchResult(JSON.parse(localStorage.getItem('searchResults')));
+        } else if (isLoggedIn) {
             mainApi.getMovies()
-                .then((myMovies) => {
-                    setSavedMovies(myMovies);
+                .then((res) => {
+                    setSavedMovies(res);
+                    localStorage.setItem('savedMovies', JSON.stringify(res));
                 })
                 .catch((err) => console.log(err));
         }
@@ -116,35 +117,28 @@ function App() {
         console.log(data);
         auth.register(data)
             .then((res) => {
-                //setCurrentUser(data);
                 setCurrentUser(res);
-                console.log(res);
-                console.log(data);
+                console.log(currentUser);
                 handleLogin(data);
-                return;
+                //return;
             })
             .catch((err) => {
                 console.log(err);
             });
     };
 
-    function handleLogin({email, password}) {
-        const data = {email, password};
-        auth.authorization(data)
+    function handleLogin(values) {
+        auth.authorization(values)
             .then((res) => {
-              console.log(data);
-              console.log(res);
-              //if (res.token) { 
+              if (res.token) { 
                 localStorage.setItem('token', res.token);
-                console.log(res);
-                console.log(data);
+                setCurrentUser(res);
                 console.log(currentUser);
                 setInfoTooltipImage(successImage);
                 setInfoTooltipMessage("Вы успешно авторизовались!");
                 setIsLoggedIn(true);
                 navigate('/movies');
-                return;
-              //}   
+              }   
             })
             .catch((err) => {
                 setInfoTooltipImage(failImage);
@@ -154,38 +148,10 @@ function App() {
             .finally(handleInfoTooltip);
     };
 
-    /*function handleChangeProfile(values) {
-        console.log('name in handleChangeProfile: ', values.name);
-        console.log('email in handleChangeProfile: ', values.email);
-        console.log('_id in handleChangeProfile: ', values._id);
+    function handleChangeProfile(values) {
         mainApi.editProfileData(values)
             .then((res) => {
                 setCurrentUser(res);
-                console.log(res);
-                console.log(values);
-                setInfoTooltipImage(successImage);
-                setInfoTooltipMessage("Вы успешно сменили данные профиля!");
-            })
-            .catch((err) => {
-                setInfoTooltipImage(failImage);
-                setInfoTooltipMessage("Что-то пошло не так! Попробуйте ещё раз.");
-                console.log(err);
-            })
-            .finally(handleInfoTooltip);
-    }*/
-
-    function handleChangeProfile(data) {
-        console.log(data);
-        console.log('name in handleChangeProfile: ', data.name);
-        console.log('email in handleChangeProfile: ', data.email);
-        console.log('_id in handleChangeProfile: ', data._id);
-        const userData = { name: data.name, email: data.email };
-        console.log(userData);
-        mainApi.editProfileData(userData)
-            .then((userData) => {
-                setCurrentUser(userData);
-                console.log(data);
-                console.log(userData);
                 setInfoTooltipImage(successImage);
                 setInfoTooltipMessage("Вы успешно сменили данные профиля!");
             })
@@ -213,21 +179,22 @@ function App() {
         navigate('/');
     }
 
+    // поиск слова в сохраненных фильмах
     function handleSearchRequestInSaved(searchWord, checkboxState) {
-        setIsLoading(true);
+        //setIsLoading(true);
         setTimeout(() => {
             const movieList = filterBySearchWord(savedMovies, searchWord, checkboxState);
-            if (movieList !== null && movieList.length !== 0) {
+            /*if (movieList !== null && movieList.length !== 0) {
                 setIsNoResults(false);
             } else {
                 setIsNoResults(true);
-            }
+            }*/
             localStorage.setItem('checkboxStateInSaved', checkboxState);
             setSavedMovieSearchResult(movieList);
             setIsSavedMoviesFiltered(true);
-            setIsLoading(false);
+            //setIsLoading(false);
         }, 1000);
-    };    
+    };
 
     function resetIsSavedMoviesFiltered () {
         setIsSavedMoviesFiltered(false);
@@ -245,6 +212,7 @@ function App() {
             .then((allMovies) => {
                 localStorage.setItem('allMovies', JSON.stringify(allMovies));
 
+                //список фильмов полученный с сервера по слову в поиске и по чекбоксу
                 const movieList = filterBySearchWord(allMovies, searchWord, checkboxState);
                 if (movieList !== null && movieList.length !== 0) {
                     localStorage.setItem('searchResults', JSON.stringify(movieList));
@@ -261,6 +229,7 @@ function App() {
             .catch((err) => console.log(err));
     };
 
+    //функция которая отвечает за поиск фильмов без учета регистра букв
     function filterBySearchWord(allMovies, searchWord, checkboxState) {
         if (allMovies.length > 0) {
             if (checkboxState === true) {
@@ -273,12 +242,14 @@ function App() {
         }
     };
 
+    //константа которая достает из локального хранилища слово которое искал пользователь
     const searchWordInLocalStorage = localStorage.getItem('searchWord');
 
+    //функция которая меняет состояние чекбокса в хранидище
     function switchCheckBox() {
         const filter = JSON.parse(localStorage.getItem('checkboxState'));
         localStorage.setItem('checkboxState', !filter);
-        setIsShortMovieChecked(!filter);
+        setIsShortMovieChecked(!filter/*localStorage.getItem('checkboxState')*/);
     }
 
     //сохранение фильма
@@ -298,8 +269,10 @@ function App() {
         }
 
         mainApi.saveMovie(savedMovie)
-            .then((newSavedMovies) => {
-                setSavedMovies([newSavedMovies, ...savedMovies])
+            .then((res) => {
+                const newSavedMovies = [...savedMovies, res];
+                setSavedMovies(newSavedMovies);
+                localStorage.setItem('savedMovies', JSON.stringify(newSavedMovies));
             })
             .catch((err) => console.log(err));
     };
@@ -307,26 +280,23 @@ function App() {
     //удаление фильма во вкладке фильмы
     function handleMovieDelete(movie) {
         let result = savedMovies.find(el => el.movieId === movie.id)
-        console.log(result);
-        console.log(result._id);
-        console.log(movie);
-        console.log(movie.id);
-
         mainApi.deleteMovie(result._id)
             .then((res) => {
                 console.log(res);
-                setSavedMovies(prevMovies => prevMovies.filter(item => item._id !== res._id));
+                const filteredMovies = savedMovies.filter((item) => item._id !== res._id);
+                setSavedMovies(filteredMovies);
+                localStorage.setItem('savedMovies', JSON.stringify(filteredMovies));
             })
             .catch((err) => console.log(err));
     };
 
     //удаление фильма во вкладке сохраненные фильмы
     function handleDeleteSavedMovies(movie) {
-        console.log(movie);
-        console.log(movie._id);
         mainApi.deleteMovie(movie._id)
             .then((res) => {
-                setSavedMovies(prevMovies => prevMovies.filter(item => item._id !== res._id));
+                const filteredMovies = savedMovies.filter((item) => item._id !== res._id);
+                setSavedMovies(filteredMovies);
+                localStorage.setItem('savedMovies', JSON.stringify(filteredMovies));
             })
             .catch((err) => console.log(err));
     };
@@ -353,12 +323,12 @@ function App() {
                             searchWord={searchWordInLocalStorage}
                             onSearch={handleSearchMoviesInMoviesApi}
                             handleCheckboxSwitch={switchCheckBox}
-                            isLoggedIn={isLoggedIn}
                             isShortMovieChecked={isShortMovieChecked}
                             isNoResults={isNoResults}
                             isLoading={isLoading}
                             onMovieSave={handleMovieSave}
                             onMovieDelete={handleMovieDelete}
+                            setSavedMovies={setSavedMovies}
                         />
                     </ProtectedRoute>
                 } />
@@ -366,15 +336,17 @@ function App() {
                     <ProtectedRoute isLoggedIn={isLoggedIn}>
                         <SavedMovies 
                             movies={isSavedMoviesFiltered ? savedMovieSearchResult : savedMovies}
+                            //movies={savedMovies}
+                            setSavedMovies={setSavedMovies}
                             savedMovies={savedMovies}
+                            //isLoading={isLoading}
                             savedMovieSearchResult={savedMovieSearchResult}
                             isSavedMoviesFiltered={isSavedMoviesFiltered}
                             //onSearch={handleSearchMoviesInMoviesApi}
                             onSavedSearch={handleSearchRequestInSaved}
                             handleCheckboxSwitch={switchCheckBox}
-                            isLoggedIn={isLoggedIn}
                             isShortMovieChecked={isShortMovieChecked}
-                            isNoResults={isNoResults}
+                            //isNoResults={isNoResults}
                             resetIsSavedMoviesFiltered={resetIsSavedMoviesFiltered}
                             onMovieDelete={handleDeleteSavedMovies}
                         />

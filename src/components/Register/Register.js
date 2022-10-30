@@ -1,16 +1,34 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ValidationForm } from '../../utils/validationForm';
 import registerLogo from '../../images/header_logo.svg';
 
 function Register({ onRegister }) {
-    const { values, handleChange, errors, isValid, resetForm } = ValidationForm();
+    const [values, setValues] = useState({});
+    const [errors, setErrors] = useState({});
+    const [isValid, setIsValid] = useState(false);
+  
+    const handleChange = (event) => {
+      const target = event.target;
+      const name = target.name;
+      const value = target.value;
+
+      setValues({...values, [name]: value});
+      setErrors({...errors, [name]: target.validationMessage });
+      setIsValid(target.closest("form").checkValidity());
+    };
 
     function handleSubmit(e) {
         e.preventDefault();
         onRegister(values);
-        //onRegister(values.name, values.email, values.password);
     }
+  
+    /*const { values, handleChange, errors, isValid, resetForm } = ValidationForm();
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        onRegister(values);
+    }*/
 
     return ( 
         <div className="register">
