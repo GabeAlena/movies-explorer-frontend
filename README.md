@@ -6,3 +6,7 @@ https://alena.moviesexplorer.nomoredomains.sbs
 
 Ссылка на бэкенд:
 https://api.alena.moviesexplorer.nomoredomains.sbs
+
+Ссылка на пул реквест:
+
+https://github.com/GabeAlena/movies-explorer-frontend/pull/2
