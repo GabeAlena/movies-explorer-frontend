@@ -44,8 +44,6 @@ function SearchForm({ onSearch, onSavedSearch }) {
             } else {
                 document.getElementById("first").checked = false;
             }
-            //document.getElementById("first").checked = false;
-            //localStorage.setItem('checkboxStateInSaved', false); 
         }
 
         return () => {
@@ -55,12 +53,7 @@ function SearchForm({ onSearch, onSavedSearch }) {
 
     function onSwitch() {
         const searchWord = location.pathname === '/movies' ? searchWordLS : searchWordInSavedLS;
-        //const checked = true ? false : true;
         location.pathname === '/movies' ? onSearch(searchWord, !checkboxState) : onSavedSearch(searchWord, !checkboxState);
-        //location.pathname === '/movies' && localStorage.setItem('checkboxState', checked);
-        //location.pathname === '/saved-movies' && localStorage.setItem('checkboxState', checked); 
-        //document.getElementById("first").checked = checked;
-        //console.log(localStorage.getItem('checkboxState'))
     }  
 
     return (

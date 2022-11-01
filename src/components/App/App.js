@@ -56,7 +56,6 @@ function App() {
                         setCurrentUser(res);
                         setIsLoggedIn(true);
                         setMovieSearchResult(getSearchResults);
-                        //setSavedMovies(JSON.parse(localStorage.getItem('savedMovies')));
                         setIsShortMovieChecked(JSON.parse(localStorage.getItem('checkboxState')));
                     }
                 })
@@ -138,25 +137,6 @@ function App() {
         }
     }, [isLoggedIn]);
 
-    //ЭФФЕКТ ПОКАЗЫВАЕТ ПОСЛЕДНИЕ ФИЛЬМЫ КОТОРЫЕ ИСКАЛ ПОЛЬЗОВАТЕЛЬ - ВСЕГДА. (при переходах, обновлениях страницы).
-    //НУЖНО - ЧТОБЫ ФИЛЬМЫ ПОКАЗЫВАЛИСЬ ТОЛЬКО КОГДА ПОЛЬЗОВАТЕЛЬ ЗАЛОГИНЕН. ЕСЛИ ОН ВЫШЕЛ ИЗ ПРОФИЛЯ, А ПОТОМ ЗАШЕЛ
-    //ОБРАТНО - ТО НА СТРАНИЦЕ С ФИЛЬМАМИ НЕ ДОЛЖНО БЫТЬ РЕЗУЛЬТАТА ПОИСКА
-
-    //эффект который достает из хранилища найденные в последний раз фильмы, если их там нет,
-    //то добавляет в хранилище foundedMovies
-    /*useEffect(() => {
-        if (localStorage.getItem('foundedMovies')) {
-            setMovieSearchResult(JSON.parse(localStorage.getItem('foundedMovies')));
-        } else if (isLoggedIn) {
-            mainApi.getMovies()
-                .then((res) => {
-                    setMovieSearchResult(res);
-                    localStorage.setItem('foundedMovies', JSON.stringify(res));
-                })
-                .catch((err) => console.log(err));
-        }
-    }, [isLoggedIn]);*/
-
     function handleRegister(data) {
         console.log(data);
         auth.register(data)
@@ -214,18 +194,6 @@ function App() {
         setInfoTooltip(false);
     };
 
-    /*function handleDeleteStatesAndLocalStorageData() {
-        setCurrentUser({});
-        setSavedMovies([]);
-        setMovieSearchResult([]);
-        setIsLoggedIn(false);
-        localStorage.removeItem('token');
-        localStorage.removeItem('foundedMovies');
-        localStorage.removeItem('searchWord');
-        localStorage.removeItem('checkboxState');
-        localStorage.clear();
-    };*/
-
     function handleSignOut() {
         setCurrentUser({});
         setSavedMovies([]);
@@ -250,8 +218,6 @@ function App() {
     function resetIsSavedMoviesFiltered () {
         setIsSavedMoviesFiltered(false);
     };
-
-    ////////////////
 
     //эффект, который ищет фильмы по адресу beatfilm
     useEffect(() => {
@@ -294,36 +260,6 @@ function App() {
             setIsLoading(false);  
         }, 500);
     };
-
-    ///////////
-
-    // Ниже функция ищет фильмы с сервера и она же передается на страницу movies. Так не верно! Фильмы должны искаться
-    //только 1 раз, а сортировка должна производиться из полученных movies
-    /*
-    //функция, которая ищет фильмы по адресу beatfilm
-    function handleSearchMoviesInMoviesApi(searchWord, checkboxState) {
-        setIsLoading(true);
-        moviesApi.getInitialMovies()
-            .then((movies) => {
-                localStorage.setItem('movies', JSON.stringify(movies));
-
-                //список фильмов полученный с сервера по слову в поиске и по чекбоксу
-                const movieList = filterBySearchWord(movies, searchWord, checkboxState);
-                if (movieList !== null && movieList.length !== 0) {
-                    localStorage.setItem('foundedMovies', JSON.stringify(movieList));
-                    setIsNoResults(false);
-                } else {
-                    localStorage.setItem('foundedMovies', []);
-                    setIsNoResults(true);
-                }
-                localStorage.setItem('checkboxState', checkboxState);
-                localStorage.setItem('searchWord', searchWord);
-                setMovieSearchResult(movieList);
-                setIsLoading(false);                
-            })
-            .catch((err) => console.log(err));
-    };
-    */
 
     //функция которая отвечает за поиск фильмов без учета регистра букв
     function filterBySearchWord(movies, searchWord, checkboxState) {
@@ -417,7 +353,6 @@ function App() {
                             movies={movieSearchResult}
                             savedMovies={savedMovies}
                             searchWord={searchWordInLocalStorage}
-                            //onSearch={handleSearchMoviesInMoviesApi}
                             onSearch={handleSearchRequest}
                             handleCheckboxSwitch={switchCheckBox}
                             isShortMovieChecked={isShortMovieChecked}
