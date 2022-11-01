@@ -3,6 +3,17 @@ import MoviesCardList from './MoviesCardList/MoviesCardList';
 import Preloader from './Preloader/Preloader';
 import { useEffect, useState } from 'react';
 
+import { 
+    WIDTH_DESKTOP,
+    WIDTH_TABLET,
+    CARDS_COUNT_TOTAL_DESKTOP,
+    CARDS_COUNT_TOTAL_TABLET,
+    CARDS_COUNT_TOTAL_MOBILE,
+    CARDS_COUNT_IN_WIDTH_DESKTOP,
+    CARDS_COUNT_IN_WIDTH_TABLET,
+    CARDS_COUNT_IN_WIDTH_MOBILE
+    } from '../../utils/constants';
+
 function Movies({
     movies,
     savedMovies,
@@ -30,21 +41,21 @@ function Movies({
         visibleMovies.length < movies.length ? "" : "movies__more-btn_hidden"
     }`;
 
-    const handleLoadCards = () => {
+    const handleLoadMoreCards = () => {
         setCardsCount((prevValue) => prevValue + cardsAddCount);
     };
 
     useEffect(() => {
         const handleResize = () => {
-            if (window.innerWidth >= 1280) {
-                setCardsAddCount(4);
-                setCardsCount(16);
-            } else if (window.innerWidth >= 768) {
-                setCardsAddCount(2);
-                setCardsCount(8);
+            if (window.innerWidth >= WIDTH_DESKTOP) {
+                setCardsAddCount(CARDS_COUNT_IN_WIDTH_DESKTOP);
+                setCardsCount(CARDS_COUNT_TOTAL_DESKTOP);
+            } else if (window.innerWidth >= WIDTH_TABLET) {
+                setCardsAddCount(CARDS_COUNT_IN_WIDTH_TABLET);
+                setCardsCount(CARDS_COUNT_TOTAL_TABLET);
             } else {
-                setCardsAddCount(1);
-                setCardsCount(4);
+                setCardsAddCount(CARDS_COUNT_IN_WIDTH_MOBILE);
+                setCardsCount(CARDS_COUNT_TOTAL_MOBILE);
             }
         };
         handleResize();
@@ -83,7 +94,7 @@ function Movies({
                 <button
                     type="button"
                     className={moreBtnClassName}
-                    onClick={handleLoadCards}
+                    onClick={handleLoadMoreCards}
                 >Ещё</button>    
                 </>
             )}  

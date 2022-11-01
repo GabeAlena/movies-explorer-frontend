@@ -26,6 +26,7 @@ function Login({ onLogin }) {
                     type="email"
                     minLength="2"
                     maxLength="40"
+                    pattern="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[a-z]{2,})\b"
                     onChange={handleChange}
                     value={values.email || ''}                    
                 />

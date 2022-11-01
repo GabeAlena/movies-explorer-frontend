@@ -1,3 +1,5 @@
+import { BASE_URL, API_URL } from './constants';
+
 class MainApi {
     constructor({ baseUrl }) {
         this._baseUrl = baseUrl;
@@ -84,6 +86,6 @@ class MainApi {
 }
 
 export const mainApi = new MainApi({
-    baseUrl: 'https://api.alena.moviesexplorer.nomoredomains.sbs',
-    apiUrl: 'https://api.nomoreparties.co'
+    baseUrl: BASE_URL,
+    apiUrl: API_URL
 });

@@ -31,22 +31,40 @@ function SearchForm({ onSearch, onSavedSearch }) {
 
     useEffect(() => {
         location.pathname === '/movies' ? setSearchWord(searchWordLS) : setSearchWord('');
+        if (location.pathname === '/movies') {
+            if (JSON.parse(localStorage.getItem('checkboxState')) === true) {
+                document.getElementById("first").checked = true;
+            } else {
+                document.getElementById("first").checked = false;
+            }
+        }
+        if (location.pathname === '/saved-movies') {
+            if (JSON.parse(localStorage.getItem('checkboxStateInSaved')) === true) {
+                document.getElementById("first").checked = true;
+            } else {
+                document.getElementById("first").checked = false;
+            }
+            //document.getElementById("first").checked = false;
+            //localStorage.setItem('checkboxStateInSaved', false); 
+        }
 
         return () => {
             localStorage.setItem('searchWordInSaved', '');
         }    
-    }, []);
+    }, []); 
 
     function onSwitch() {
         const searchWord = location.pathname === '/movies' ? searchWordLS : searchWordInSavedLS;
-        const checked = true ? false : true;
-
+        //const checked = true ? false : true;
         location.pathname === '/movies' ? onSearch(searchWord, !checkboxState) : onSavedSearch(searchWord, !checkboxState);
-        location.pathname === '/movies' && localStorage.setItem('checkboxState', checked);
-        location.pathname === '/saved-movies' && localStorage.setItem('checkboxState', checked);   
-    }
+        //location.pathname === '/movies' && localStorage.setItem('checkboxState', checked);
+        //location.pathname === '/saved-movies' && localStorage.setItem('checkboxState', checked); 
+        //document.getElementById("first").checked = checked;
+        //console.log(localStorage.getItem('checkboxState'))
+    }  
 
     return (
+        
         <section className="search-form__section">
             <div className="search-form__container">
                 <form className="search-form__form" onSubmit={handleSearch}>
@@ -70,6 +88,7 @@ function SearchForm({ onSearch, onSavedSearch }) {
             <div className="search-form__filter">
                 <input 
                     type="checkbox" 
+                    id="first"
                     className="search-form__filter-checkbox"
                     onClick={onSwitch}
                 ></input>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation, Navigate } from "react-router-dom";
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import Main from '../Main/Main';
@@ -19,17 +19,20 @@ import { moviesApi } from '../../utils/MoviesApi.js';
 import successImage from '../../images/success.svg';
 import failImage from '../../images/fail.svg';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import { API_URL, SHORT_MOVIE } from '../../utils/constants';
 
 function App() {
     const [currentUser, setCurrentUser] = useState({});
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
     const [infoTooltip, setInfoTooltip] = useState(false);
     const [infoTooltipImage, setInfoTooltipImage] = useState('');
     const [infoTooltilMessage, setInfoTooltipMessage] = useState('');
 
     const [sidebar, setSidebar] = useState(false);
 
+    const [movies, setMovies] = useState([]);
     const [movieSearchResult, setMovieSearchResult] = useState([]);
     const [isShortMovieChecked, setIsShortMovieChecked] = useState(false);
 
@@ -45,35 +48,61 @@ function App() {
     }
 
     const checkToken = () => {
-      const token = localStorage.getItem('token');
-      if (token) {
-        auth.checkToken(token)
-            .then((res) => {
-              if (res) {
-                setCurrentUser(res);
-                setIsLoggedIn(true);
-              }
-            })
-            .catch((err) => console.log(err))
-      }
+        const token = localStorage.getItem('token');
+        if (token) {
+            auth.checkToken(token)
+                .then((res) => {
+                    if (res) {
+                        setCurrentUser(res);
+                        setIsLoggedIn(true);
+                        setMovieSearchResult(getSearchResults);
+                        //setSavedMovies(JSON.parse(localStorage.getItem('savedMovies')));
+                        setIsShortMovieChecked(JSON.parse(localStorage.getItem('checkboxState')));
+                    }
+                })
+                .catch((err) => {
+                    console.log(err);
+                    handleSignOut();
+                })    
+        }
     };
 
     useEffect(() => {
-      checkToken();
+        if (JSON.parse(localStorage.getItem('checkboxState')) === true && location.pathname === '/movies') {
+            try {
+                document.getElementById("first").checked = true;
+            } catch (err) {
+                // Nothing
+            }
+        } else if (location.pathname === '/saved-movies') {
+            try {
+                document.getElementById("first").checked = false; // 
+                localStorage.setItem('checkboxStateInSaved', false);
+            } catch (err) {
+                // Nothing
+            } 
+        }
+        checkToken();
     }, []);
 
     useEffect(() => {
-      const token = localStorage.getItem('token');
-      if (isLoggedIn || token) {
-        setIsLoggedIn(true);
-      }
+        const token = localStorage.getItem('token');
+        if (isLoggedIn || token) {
+            setIsLoggedIn(true);
+        }
     }, [isLoggedIn]);
 
+    // дает переходить по url аторизованному пользователю
+    // и позволяет выкидывать пользователя при невалидном токине
     useEffect(() => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        handleSignOut();
-      }
+        const token = localStorage.getItem('token');
+        if (!token) {
+            if (location.pathname === "/profile" ||
+                location.pathname === "/movies" ||
+                location.pathname === "/saved-movies") {
+                    handleSignOut();
+            }
+        } 
     }, [isLoggedIn]);
 
     useEffect(() => {
@@ -109,20 +138,24 @@ function App() {
         }
     }, [isLoggedIn]);
 
+    //ЭФФЕКТ ПОКАЗЫВАЕТ ПОСЛЕДНИЕ ФИЛЬМЫ КОТОРЫЕ ИСКАЛ ПОЛЬЗОВАТЕЛЬ - ВСЕГДА. (при переходах, обновлениях страницы).
+    //НУЖНО - ЧТОБЫ ФИЛЬМЫ ПОКАЗЫВАЛИСЬ ТОЛЬКО КОГДА ПОЛЬЗОВАТЕЛЬ ЗАЛОГИНЕН. ЕСЛИ ОН ВЫШЕЛ ИЗ ПРОФИЛЯ, А ПОТОМ ЗАШЕЛ
+    //ОБРАТНО - ТО НА СТРАНИЦЕ С ФИЛЬМАМИ НЕ ДОЛЖНО БЫТЬ РЕЗУЛЬТАТА ПОИСКА
+
     //эффект который достает из хранилища найденные в последний раз фильмы, если их там нет,
-    //то добавляет в хранилище searchResults
-    useEffect(() => {
-        if (localStorage.getItem('searchResults')) {
-            setMovieSearchResult(JSON.parse(localStorage.getItem('searchResults')));
+    //то добавляет в хранилище foundedMovies
+    /*useEffect(() => {
+        if (localStorage.getItem('foundedMovies')) {
+            setMovieSearchResult(JSON.parse(localStorage.getItem('foundedMovies')));
         } else if (isLoggedIn) {
             mainApi.getMovies()
                 .then((res) => {
                     setMovieSearchResult(res);
-                    localStorage.setItem('searchResults', JSON.stringify(res));
+                    localStorage.setItem('foundedMovies', JSON.stringify(res));
                 })
                 .catch((err) => console.log(err));
         }
-    }, [isLoggedIn]);
+    }, [isLoggedIn]);*/
 
     function handleRegister(data) {
         console.log(data);
@@ -181,13 +214,30 @@ function App() {
         setInfoTooltip(false);
     };
 
-    function handleSignOut() {
+    /*function handleDeleteStatesAndLocalStorageData() {
         setCurrentUser({});
+        setSavedMovies([]);
+        setMovieSearchResult([]);
         setIsLoggedIn(false);
         localStorage.removeItem('token');
+        localStorage.removeItem('foundedMovies');
+        localStorage.removeItem('searchWord');
+        localStorage.removeItem('checkboxState');
+        localStorage.clear();
+    };*/
+
+    function handleSignOut() {
+        setCurrentUser({});
+        setSavedMovies([]);
+        setMovieSearchResult([]);
+        setIsLoggedIn(false);
+        localStorage.removeItem('token');
+        localStorage.removeItem('foundedMovies');
+        localStorage.removeItem('searchWord');
+        localStorage.removeItem('checkboxState');
         localStorage.clear();
         navigate('/');
-    }
+    };
 
     // поиск слова в сохраненных фильмах
     function handleSearchRequestInSaved(searchWord, checkboxState) {
@@ -201,20 +251,69 @@ function App() {
         setIsSavedMoviesFiltered(false);
     };
 
+    ////////////////
+
+    //эффект, который ищет фильмы по адресу beatfilm
+    useEffect(() => {
+        if (isLoggedIn) {
+            moviesApi.getInitialMovies()
+                .then((movies) => {
+                    setMovies(movies);
+                })
+        }
+    }, [isLoggedIn]);
+
+    function getSearchResults() {
+        try {
+            return localStorage.getItem('foundedMovies').length > 0 ?
+            JSON.parse(localStorage.getItem('foundedMovies')) :
+            [];
+        } catch(err) {
+            return [];
+        }
+
+    };
+
+    // функция которая отвечает за поиск фильмов из уже полученных данныз с сервера
+    function handleSearchRequest(searchWord, checkboxState) {
+        setIsLoading(true);
+        setTimeout(() => {
+
+            //список фильмов полученный с сервера по слову в поиске и по чекбоксу
+            const movieList = filterBySearchWord(movies, searchWord, checkboxState);
+            if (movieList !== null && movieList.length !== 0) {
+                localStorage.setItem('foundedMovies', JSON.stringify(movieList));
+                setIsNoResults(false);
+            } else {
+                localStorage.setItem('foundedMovies', []);
+                setIsNoResults(true);
+            }
+            localStorage.setItem('checkboxState', checkboxState);
+            localStorage.setItem('searchWord', searchWord);
+            setMovieSearchResult(movieList);
+            setIsLoading(false);  
+        }, 500);
+    };
+
+    ///////////
+
+    // Ниже функция ищет фильмы с сервера и она же передается на страницу movies. Так не верно! Фильмы должны искаться
+    //только 1 раз, а сортировка должна производиться из полученных movies
+    /*
     //функция, которая ищет фильмы по адресу beatfilm
     function handleSearchMoviesInMoviesApi(searchWord, checkboxState) {
         setIsLoading(true);
         moviesApi.getInitialMovies()
-            .then((allMovies) => {
-                localStorage.setItem('allMovies', JSON.stringify(allMovies));
+            .then((movies) => {
+                localStorage.setItem('movies', JSON.stringify(movies));
 
                 //список фильмов полученный с сервера по слову в поиске и по чекбоксу
-                const movieList = filterBySearchWord(allMovies, searchWord, checkboxState);
+                const movieList = filterBySearchWord(movies, searchWord, checkboxState);
                 if (movieList !== null && movieList.length !== 0) {
-                    localStorage.setItem('searchResults', JSON.stringify(movieList));
+                    localStorage.setItem('foundedMovies', JSON.stringify(movieList));
                     setIsNoResults(false);
                 } else {
-                    localStorage.setItem('searchResults', []);
+                    localStorage.setItem('foundedMovies', []);
                     setIsNoResults(true);
                 }
                 localStorage.setItem('checkboxState', checkboxState);
@@ -224,14 +323,15 @@ function App() {
             })
             .catch((err) => console.log(err));
     };
+    */
 
     //функция которая отвечает за поиск фильмов без учета регистра букв
-    function filterBySearchWord(allMovies, searchWord, checkboxState) {
-        if (allMovies.length > 0) {
+    function filterBySearchWord(movies, searchWord, checkboxState) {
+        if (movies.length > 0 && searchWord !== null) {
             if (checkboxState === true) {
-                return allMovies.filter((movie) => movie.nameRU.toLowerCase().includes(searchWord.toLowerCase()) && movie.duration < 40);
+                return movies.filter((movie) => movie.nameRU.toLowerCase().includes(searchWord.toLowerCase()) && movie.duration < SHORT_MOVIE);
             } else {
-                return allMovies.filter((movie) => movie.nameRU.toLowerCase().includes(searchWord.toLowerCase()));
+                return movies.filter((movie) => movie.nameRU.toLowerCase().includes(searchWord.toLowerCase()));
             }
         } else {
             return [];
@@ -245,7 +345,7 @@ function App() {
     function switchCheckBox() {
         const filter = JSON.parse(localStorage.getItem('checkboxState'));
         localStorage.setItem('checkboxState', !filter);
-        setIsShortMovieChecked(!filter/*localStorage.getItem('checkboxState')*/);
+        setIsShortMovieChecked(!filter);
     }
 
     //сохранение фильма
@@ -256,9 +356,9 @@ function App() {
             duration: movie.duration,
             year: movie.year,
             description: movie.description,
-            image: `https://api.nomoreparties.co/${movie.image.url}`,
+            image: `${API_URL}/${movie.image.url}`,
             trailerLink: movie.trailerLink || '',
-            thumbnail: `https://api.nomoreparties.co/${movie.image.formats.thumbnail.url}`,
+            thumbnail: `${API_URL}/${movie.image.formats.thumbnail.url}`,
             movieId: movie.id,
             nameRU: movie.nameRU || '',
             nameEN: movie.nameEN || '',
@@ -298,7 +398,7 @@ function App() {
     };
 
     return (
-        <CurrentUserContext.Provider value={{isLoggedIn, currentUser}}>
+        <CurrentUserContext.Provider value={{ isLoggedIn, currentUser }}>
             <Header 
                 isLoggedIn={isLoggedIn}
                 handleOpenMenu={handleOpenMenu}
@@ -317,7 +417,8 @@ function App() {
                             movies={movieSearchResult}
                             savedMovies={savedMovies}
                             searchWord={searchWordInLocalStorage}
-                            onSearch={handleSearchMoviesInMoviesApi}
+                            //onSearch={handleSearchMoviesInMoviesApi}
+                            onSearch={handleSearchRequest}
                             handleCheckboxSwitch={switchCheckBox}
                             isShortMovieChecked={isShortMovieChecked}
                             isNoResults={isNoResults}
@@ -352,12 +453,25 @@ function App() {
                         />
                     </ProtectedRoute>
                 } />
-                <Route path="/signin" element={
-                    <Login onLogin={handleLogin} />
-                } />
-                <Route path="/signup" element={
-                    <Register onRegister={handleRegister} />
-                } />
+
+                {isLoggedIn ? (
+                <Route path="/signin"
+                    element={<Navigate replace to="/" />}
+                /> ) : (
+                <Route path="/signin"
+                    element={<Login onLogin={handleLogin} />}
+                />                    
+                )}
+
+                {isLoggedIn ? (
+                <Route path="/signup"
+                    element={<Navigate replace to="/" />}
+                /> ) : (
+                <Route path="/signup"
+                    element={<Register onRegister={handleRegister} />}
+                />                    
+                )}
+
                 <Route path="/*" element={
                     <NotFound />
                 } />
