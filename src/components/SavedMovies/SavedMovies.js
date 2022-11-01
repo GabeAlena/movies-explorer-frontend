@@ -1,5 +1,6 @@
 import SearchForm from '../Movies/SearchForm/SearchForm';
 import MoviesCardList from '../Movies/MoviesCardList/MoviesCardList';
+import Preloader from '../Movies/Preloader/Preloader';
 
 function SavedMovies({ 
     movies,
@@ -7,6 +8,7 @@ function SavedMovies({
     savedMovieSearchResult,
     isSavedMoviesFiltered,
     onSearch,
+    isLoading,
     onSavedSearch,
     handleCheckboxSwitch,
     isLoggenIn,
@@ -24,6 +26,9 @@ function SavedMovies({
                 handleCheckboxSwitch={handleCheckboxSwitch}
                 isShortMovieChecked={isShortMovieChecked} />
             </section>
+            {isLoading ? (
+                <Preloader isLoading={isLoading} />
+            ) : (
             <section className="movies-list">
                 <MoviesCardList 
                     movies={movies}
@@ -35,6 +40,7 @@ function SavedMovies({
                     onMovieDelete={onMovieDelete}
                 />
             </section>
+            )}
         </main>    
     )
 }

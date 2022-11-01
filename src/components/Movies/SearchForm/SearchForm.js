@@ -39,16 +39,14 @@ function SearchForm({ onSearch, onSavedSearch }) {
             }
         }
         if (location.pathname === '/saved-movies') {
-            if (JSON.parse(localStorage.getItem('checkboxStateInSaved')) === true) {
-                document.getElementById("first").checked = true;
-            } else {
                 document.getElementById("first").checked = false;
-            }
+                localStorage.setItem('checkboxStateInSaved', false);
+                onSavedSearch('', false);                
         }
 
         return () => {
             localStorage.setItem('searchWordInSaved', '');
-        }    
+        }  
     }, []); 
 
     function onSwitch() {

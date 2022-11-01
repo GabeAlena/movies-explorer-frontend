@@ -67,6 +67,8 @@ function App() {
     };
 
     useEffect(() => {
+        checkToken();
+
         if (JSON.parse(localStorage.getItem('checkboxState')) === true && location.pathname === '/movies') {
             try {
                 document.getElementById("first").checked = true;
@@ -75,13 +77,12 @@ function App() {
             }
         } else if (location.pathname === '/saved-movies') {
             try {
-                document.getElementById("first").checked = false; // 
+                document.getElementById("first").checked = false; 
                 localStorage.setItem('checkboxStateInSaved', false);
             } catch (err) {
                 // Nothing
             } 
         }
-        checkToken();
     }, []);
 
     useEffect(() => {
@@ -209,10 +210,11 @@ function App() {
 
     // поиск слова в сохраненных фильмах
     function handleSearchRequestInSaved(searchWord, checkboxState) {
-        const movieList = filterBySearchWord(savedMovies, searchWord, checkboxState);
+        const movieList = filterBySearchWord(JSON.parse(localStorage.getItem('savedMovies')), searchWord, checkboxState);
         localStorage.setItem('checkboxStateInSaved', checkboxState);
         setSavedMovieSearchResult(movieList);
         setIsSavedMoviesFiltered(true);
+        setIsLoading(false);
     };
 
     function resetIsSavedMoviesFiltered () {
@@ -327,8 +329,11 @@ function App() {
         mainApi.deleteMovie(movie._id)
             .then((res) => {
                 const filteredMovies = savedMovies.filter((item) => item._id !== res._id);
+                console.log(filteredMovies);
                 setSavedMovies(filteredMovies);
                 localStorage.setItem('savedMovies', JSON.stringify(filteredMovies));
+                console.log(JSON.parse(localStorage.getItem('savedMovies')));
+                handleSearchRequestInSaved(localStorage.getItem('searchWordInSaved'), localStorage.getItem('checkboxStateInSaved'));
             })
             .catch((err) => console.log(err));
     };
@@ -377,6 +382,7 @@ function App() {
                             isShortMovieChecked={isShortMovieChecked}
                             resetIsSavedMoviesFiltered={resetIsSavedMoviesFiltered}
                             onMovieDelete={handleDeleteSavedMovies}
+                            isLoading={isLoading}
                         />
                     </ProtectedRoute>
                 } />
