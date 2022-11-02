@@ -1,21 +1,61 @@
 import React from 'react';
 import { useLocation } from "react-router-dom";
-import filmLink from '../../../images/film.svg';
 
-function MoviesCard() {
+function MoviesCard({ movie, onMovieSave, onMovieDelete, savedMovies }) {
     const location = useLocation();
+    const isSaved = savedMovies.some(i => i.movieId === movie.id);
+
+    function handleSave() {
+        if (isSaved) {
+            return onMovieDelete(movie);
+        }
+        return onMovieSave(movie);
+    };
+
+    function handleDeleteMovie() {
+        onMovieDelete(movie);
+    };
+
+    const formatMovieDuration = () => {
+        const duration = movie.duration;
+        const hours = Math.floor(duration / 60);
+        const mins = duration - hours * 60;
+        return `${hours > 0 ? hours + 'ч ' : ''}${mins > 0 ? mins + 'м' : ''}`;
+    }
 
     return (
         <article className="movie-card">
-            <img className="movie-card__image" src={filmLink} alt="постер фильма" />
+            <a className="movie-card__image-link" href={movie.trailerLink} target="blank">
+                <img 
+                    className="movie-card__image" 
+                    src={location.pathname === '/movies' ? `https://api.nomoreparties.co${movie.image.url}` : movie.image}
+                    alt={movie.nameRU}
+                />
+            </a>
             <div className="movie-card__title-duration-like">
                 <div className="movie-card__title-like">
-                    <h2 className="movie-card__title">33 слова о дизайне</h2>
-                    <button className={` ${location.pathname === '/movies' ? 'movie-card__like-button' : 'movie-card__delete-button'} `} type="button" aria-label="кнопка лайкнуть" />
-                    { /* <button className="movie-card__dislike-button" type="button" aria-label="кнопка дизлайкнуть" /> */ }
-                    { /* <button className="movie-card__delete-button" type="button" aria-label="кнопка удалить из моих фильмов" /> */ }
+                    <h2 
+                        className="movie-card__title"
+                        alt={movie.nameRU}
+                    >{movie.nameRU}</h2>
+                    {location.pathname === '/movies' && (
+                        <button 
+                            className={isSaved ? 'movie-card__like-button' : 'movie-card__dislike-button'}
+                            type="button" 
+                            aria-label="кнопка дизлайкнуть"
+                            onClick={handleSave}
+                        />
+                    )}
+                    {location.pathname === '/saved-movies' && (
+                        <button 
+                            className="movie-card__delete-button"
+                            type="button" 
+                            aria-label="кнопка дизлайкнуть"
+                            onClick={handleDeleteMovie}
+                        />
+                    )}
                 </div>
-                <p className="movie-card__duration">1ч42м</p>
+                <p className="movie-card__duration">{formatMovieDuration()}</p>
             </div>
         </article>
     )

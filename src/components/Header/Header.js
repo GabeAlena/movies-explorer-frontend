@@ -3,7 +3,11 @@ import headerLogo from '../../images/header_logo.svg';
 import { Link, Routes, Route } from "react-router-dom";
 import Navigation from '../Navigation/Navigation';
 
-const Header = () => {
+function Header({ isLoggedIn, handleOpenMenu }) {
+    /* function handleClick() {
+        handleOpenSidebar(sidebar);
+    } */
+
     return (
                 <Routes>
                     <Route exact path="/" element={
@@ -12,22 +16,32 @@ const Header = () => {
                                 <Link to="/" className="header__logo">
                                     <img src={headerLogo} alt="логотип сайта" />
                                 </Link>
-                                <div className="header__nav">
-                                    <Link to="/signup" className="header__register">Регистрация</Link>                                                           
-                                    <Link to="/signin" className="header__login">Войти</Link>    
-                                </div>   
+                                { isLoggedIn ?
+                                    <>
+                                    <Navigation onClick={handleOpenMenu} />
+                                    <button type="button" className="header__nav-button" onClick={handleOpenMenu}>
+                                        <span></span>
+                                    </button>
+                                    </> 
+                                :
+                                    <div className="header__nav">
+                                        <Link to="/signup" className="header__register">Регистрация</Link>                                                           
+                                        <Link to="/signin" className="header__login">Войти</Link>    
+                                    </div> 
+                                }
+ 
                             </header>                                                    
                         </>
                     }/>
                     {["movies", "saved-movies", "profile"].map((path, index) => 
-                        <Route path={path} key={index} element={
+                        <Route path={path} key={index} onClick={handleOpenMenu} element={
                             <>
                                 <header className="header header_color_white">
                                     <Link to="/" className="header__logo">
                                         <img src={headerLogo} alt="логотип сайта" />
                                     </Link>
-                                    <Navigation />
-                                    <button type="button" className="header__nav-button">
+                                    <Navigation onClick={handleOpenMenu} />
+                                    <button type="button" className="header__nav-button" onClick={handleOpenMenu}>
                                         <span></span>
                                     </button>
                                 </header>    

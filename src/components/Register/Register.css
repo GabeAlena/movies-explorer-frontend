@@ -31,8 +31,7 @@
 .register__label {
   margin: 0;
   padding: 0;
-  margin-top: 24px;
-  margin-bottom: 5px;
+  margin-top: 6px;
   font-family: 'Inter', Arial, sans-serif;
   font-style: normal;
   font-weight: 400;
@@ -50,6 +49,7 @@
   margin: 0;
   padding: 0;
   padding-bottom: 10px;
+  padding-top: 5px;
   font-family: 'Inter', Arial, sans-serif;
   font-style: normal;
   font-weight: 400;
@@ -62,10 +62,19 @@
   border-bottom: 1px solid #e8e8e8;
 }
 
+.register__input:focus {
+  border-bottom: 1px solid #3456f3;
+  outline: none;
+}
+
 @media screen and (max-width: 460px){
   .register__input {
     font-weight: 500;
   }
+}
+
+.register__input_error {
+  border-bottom: 1px solid red;
 }
 
 .register__error {
@@ -79,6 +88,7 @@
   line-height: 12px;
   color: #ee3465;
   text-decoration: none;
+  min-height: 30px;
 }
 
 .register__button {
@@ -111,6 +121,12 @@
     font-size: 12px;
     line-height: 15px;
   }
+}
+
+.register__button_disabled {
+  pointer-events: none;
+  background-color: #f8f8f8;
+  color: #c2c2c2;
 }
 
 .register__in {
