@@ -150,7 +150,8 @@ function App() {
                 console.log(err);
                 setInfoTooltipImage(failImage);
                 setInfoTooltipMessage("Что-то пошло не так! Наверное этот email уже занят, попробуйте другой!");
-            });
+            })
+            .finally(handleInfoTooltip);
     };
 
     function handleLogin(values) {
