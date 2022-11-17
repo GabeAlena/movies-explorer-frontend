@@ -27,8 +27,6 @@ class MainApi {
 
     //редактирование профиля
     editProfileData(data) {
-        console.log(data.name);
-        console.log(data.email);
         return fetch(`${this._baseUrl}/users/me`, {
             method: 'PATCH',
             headers: {
@@ -57,8 +55,6 @@ class MainApi {
 
     //сохранение фильма
     saveMovie(data) {
-        console.log(data);
-        console.log(data.movieId);
         return fetch(`${this._baseUrl}/movies`, {
             method: 'POST',
             headers: {
@@ -72,7 +68,6 @@ class MainApi {
 
     //удаление фильма
     deleteMovie(id) {
-        console.log(id);
         return fetch(`${this._baseUrl}/movies/${id}`, {
             method: 'DELETE',
             headers: {

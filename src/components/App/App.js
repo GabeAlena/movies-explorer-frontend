@@ -139,11 +139,9 @@ function App() {
     }, [isLoggedIn]);
 
     function handleRegister(data) {
-        console.log(data);
         auth.register(data)
             .then((res) => {
                 setCurrentUser(res);
-                console.log(currentUser);
                 handleLogin(data);
             })
             .catch((err) => {
@@ -160,7 +158,6 @@ function App() {
               if (res.token) { 
                 localStorage.setItem('token', res.token);
                 setCurrentUser(res);
-                console.log(currentUser);
                 setInfoTooltipImage(successImage);
                 setInfoTooltipMessage("Вы успешно авторизовались!");
                 setIsLoggedIn(true);
@@ -319,7 +316,6 @@ function App() {
         let result = savedMovies.find(el => el.movieId === movie.id)
         mainApi.deleteMovie(result._id)
             .then((res) => {
-                console.log(res);
                 const filteredMovies = savedMovies.filter((item) => item._id !== res._id);
                 setSavedMovies(filteredMovies);
                 localStorage.setItem('savedMovies', JSON.stringify(filteredMovies));
@@ -332,10 +328,8 @@ function App() {
         mainApi.deleteMovie(movie._id)
             .then((res) => {
                 const filteredMovies = savedMovies.filter((item) => item._id !== res._id);
-                console.log(filteredMovies);
                 setSavedMovies(filteredMovies);
                 localStorage.setItem('savedMovies', JSON.stringify(filteredMovies));
-                console.log(JSON.parse(localStorage.getItem('savedMovies')));
                 handleSearchRequestInSaved(localStorage.getItem('searchWordInSaved'), localStorage.getItem('checkboxStateInSaved'));
             })
             .catch((err) => console.log(err));

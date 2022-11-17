@@ -4,10 +4,7 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 function Profile({ onSignOut, onChangeProfile }) {
     const { currentUser } = useContext(CurrentUserContext);
-
     const { values, handleChange, isValid, setValues, errors } = ValidationForm();
-
-    console.log(values);
     
     function handleSubmit(e) {
         e.preventDefault();
