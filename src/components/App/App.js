@@ -147,9 +147,9 @@ function App() {
                 handleLogin(data);
             })
             .catch((err) => {
-                console.log(err);
                 setInfoTooltipImage(failImage);
                 setInfoTooltipMessage("Что-то пошло не так! Наверное этот email уже занят, попробуйте другой!");
+                console.log(err);
             })
             .finally(handleInfoTooltip);
     };
